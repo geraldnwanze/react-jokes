@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Joke from './Joke';
+import jokesData from "./jokes.json";
 
 function App() {
+  const [jokes, setJokes] = useState(jokesData);
+
+  const joke = jokes.map(joke => (
+    <Joke key={joke.id} joke={joke} toggle={() => toggle(joke.id)} />
+  ))
+
+  function toggle(id) {
+    setJokes(prevJokes => (
+      prevJokes.map(joke => (
+        joke.id === id ? {...joke, isShown: !joke.isShown} : joke
+      ))
+    ))
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {joke}
     </div>
   );
 }
